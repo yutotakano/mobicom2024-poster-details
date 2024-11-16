@@ -99,122 +99,124 @@ The following is a diagram illustrating the challenges inhibiting the adoption o
 
 ## Qualitative Analysis
 
-<table style={{ width: "100%", borderCollapse: "collapse" }}>
-  <thead>
-    <tr>
-      <th></th>
-      <th class="bg-red-800 text-white p-2">
-        <span style={{ fontSize: "larger" }}>EKS with Fargate</span> <br /> <span>(unsuited)</span>
-      </th>
-      <th class="bg-green-800 text-white p-2">
-        <span style={{ fontSize: "larger" }}>EKS with EC2</span> <br /> <span>(feasible)</span>
-      </th>
-      <th class="bg-gray-400 text-white p-2">
-        <span style={{ fontSize: "larger" }}>Self-hosted K8S on EC2</span> <br /> <span>(suboptimal)</span>
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class="text-lg font-bold">
-        Flexibility in Configuration
-      </td>
-      <td class="align-top">
-        <span class="bg-red-800 text-white font-bold px-1">Worst:</span> Fargate's minimum VM size is 0.25 vCPU 0.5 GB. This leads to underutilisation for cloud-native CNs like CoreKube, which handles larger demands by replicating many lightweight containers.
-      </td>
-      <td class="align-top">
-        <span class="bg-green-800 text-white font-bold px-1">Best:</span> A standard VM such as <code>t3.medium</code> can fit six to seven Fargate-size pods. With CoreKube-like architectures, one can run even more pods per instance for higher performance at the same price.
-      </td>
-      <td class="align-top">
-        <span class="text-green-800 font-bold">Good:</span> The full range of EC2 VMs is available to choose from, and you can pack pods for cost efficiency. However, this setup requires extra fault-tolerant VMs for the k8s control plane to achieve HA.
-      </td>
-    </tr>
-    <tr style={{ backgroundColor: "#fce7cb" }}>
-      <td class="text-lg font-bold">
-        Migration Cost
-      </td>
-      <td class="align-top">
-        <span class="bg-red-800 font-bold text-white px-1">Worst:</span> Software required to adapt to managed k8s control plane and VM abstraction.
-      </td>
-      <td class="align-top">
-        <span class="text-red-800 font-bold">Good:</span> Requires software changes but only to adapt to the managed k8s control plane.
-      </td>
-      <td class="align-top">
-        <span class="bg-green-800 font-bold text-white px-1">Best:</span> No software changes required compared to on-prem.
-      </td>
-    </tr>
-    <tr style={{ backgroundColor: "#fce7cb" }}>
-      <td class="text-lg font-bold">
-        Service Cost
-      </td>
-      <td class="align-top">
-        <span class="text-green-800 font-bold">Good:</span> EKS cost, plus pricing for Fargate compute and memory based pricisely on usage.
-      </td>
-      <td class="align-top">
-        <span class="bg-green-800 font-bold text-white px-1">Best:</span> EKS cost, plus EC2 VM cost. EC2 Spots achieve better price-per-pod than Fargate.
-      </td>
-      <td class="align-top">
-        <span class="text-green-800 font-bold">Good:</span> Only EC2 VM cost. But high availability control-plane puts costs about equal as EKS.
-      </td>
-    </tr>
-    <tr style={{ backgroundColor: "#fce7cb" }}>
-      <td class="text-lg font-bold">
-        Personnel Cost
-      </td>
-      <td class="align-top">
-        <span class="bg-green-800 font-bold text-white px-1">Best:</span> Everything is managed by AWS, little maintenance manpower required.
-      </td>
-      <td class="align-top">
-        <span class="text-green-800 font-bold">Good:</span> Operators only need to manage workload nodes.
-      </td>
-      <td class="align-top">
-        <span class="bg-red-800 text-white font-bold px-1">Worst:</span> Operators need knowledge and skills to manage control plane and workload nodes.
-      </td>
-    </tr>
-    <tr style={{ backgroundColor: "#dbcee6" }}>
-      <td class="text-lg font-bold">
-        Debug Privileges
-      </td>
-      <td class="align-top">
-        <span class="bg-red-800 font-bold text-white px-1">Worst:</span> Without root access on the micro VMs hosting Fargate pods, it is very difficult to trace syscalls or debug issues.
-      </td>
-      <td class="align-top">
-        <span class="bg-green-800 font-bold text-white px-1">Best:</span> Privileged access on VMs for control, while removing the noise that is the k8s control plane.
-      </td>
-      <td class="align-top">
-        <span class="text-green-800 font-bold">Good:</span> Control over everything, which can lead to more unnecessary sources of error.
-      </td>
-    </tr>
-    <tr style={{ backgroundColor: "#dbcee6" }}>
-      <td class="text-lg font-bold">
-        Software Isolation
-      </td>
-      <td class="align-top">
-        <span class="bg-green-800 text-white font-bold px-1">Best:</span> Micro-VMs isolate each container.
-      </td>
-      <td class="align-top">
-        <span class="text-red-800 font-bold">Bad:</span> Isolation is entirely up to the operator.
-      </td>
-      <td class="align-top">
-        <span class="text-red-800 font-bold">Bad:</span> Isolation is entirely up to the operator.
-      </td>
-    </tr>
-    <tr style={{ backgroundColor: "#d6e8fd" }}>
-      <td class="text-lg font-bold">
-        Protocol Compliance
-      </td>
-      <td class="align-top">
-        <span class="bg-red-800 text-white font-bold px-1">Worst:</span> Requires a proxy since Fargate does not support SCTP port 38412 (NGAP).
-      </td>
-      <td class="align-top">
-        <span class="bg-green-800 text-white font-bold px-1">Best:</span> Ports work as-is as long as you allow it in the firewall.
-      </td>
-      <td class="align-top">
-        <span class="bg-green-800 text-white font-bold px-1">Best:</span> Ports work as-is as long as you allow it in the firewall.
-      </td>
-    </tr>
-  </tbody>
-</table>
+<div class="w-full overflow-x-scroll">
+  <table class="w-full border-collapse">
+    <thead>
+      <tr>
+        <th></th>
+        <th class="bg-red-800 text-white p-2">
+          <span style={{ fontSize: "larger" }}>EKS with Fargate</span> <br /> <span>(unsuited)</span>
+        </th>
+        <th class="bg-green-800 text-white p-2">
+          <span style={{ fontSize: "larger" }}>EKS with EC2</span> <br /> <span>(feasible)</span>
+        </th>
+        <th class="bg-gray-400 text-white p-2">
+          <span style={{ fontSize: "larger" }}>Self-hosted K8S on EC2</span> <br /> <span>(suboptimal)</span>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="text-lg font-bold">
+          Flexibility in Configuration
+        </td>
+        <td class="align-top">
+          <span class="bg-red-800 text-white font-bold px-1">Worst:</span> Fargate's minimum VM size is 0.25 vCPU 0.5 GB. This leads to underutilisation for cloud-native CNs like CoreKube, which handles larger demands by replicating many lightweight containers.
+        </td>
+        <td class="align-top">
+          <span class="bg-green-800 text-white font-bold px-1">Best:</span> A standard VM such as <code>t3.medium</code> can fit six to seven Fargate-size pods. With CoreKube-like architectures, one can run even more pods per instance for higher performance at the same price.
+        </td>
+        <td class="align-top">
+          <span class="text-green-800 font-bold">Good:</span> The full range of EC2 VMs is available to choose from, and you can pack pods for cost efficiency. However, this setup requires extra fault-tolerant VMs for the k8s control plane to achieve HA.
+        </td>
+      </tr>
+      <tr style={{ backgroundColor: "#fce7cb" }}>
+        <td class="text-lg font-bold">
+          Migration Cost
+        </td>
+        <td class="align-top">
+          <span class="bg-red-800 font-bold text-white px-1">Worst:</span> Software required to adapt to managed k8s control plane and VM abstraction.
+        </td>
+        <td class="align-top">
+          <span class="text-red-800 font-bold">Good:</span> Requires software changes but only to adapt to the managed k8s control plane.
+        </td>
+        <td class="align-top">
+          <span class="bg-green-800 font-bold text-white px-1">Best:</span> No software changes required compared to on-prem.
+        </td>
+      </tr>
+      <tr style={{ backgroundColor: "#fce7cb" }}>
+        <td class="text-lg font-bold">
+          Service Cost
+        </td>
+        <td class="align-top">
+          <span class="text-green-800 font-bold">Good:</span> EKS cost, plus pricing for Fargate compute and memory based pricisely on usage.
+        </td>
+        <td class="align-top">
+          <span class="bg-green-800 font-bold text-white px-1">Best:</span> EKS cost, plus EC2 VM cost. EC2 Spots achieve better price-per-pod than Fargate.
+        </td>
+        <td class="align-top">
+          <span class="text-green-800 font-bold">Good:</span> Only EC2 VM cost. But high availability control-plane puts costs about equal as EKS.
+        </td>
+      </tr>
+      <tr style={{ backgroundColor: "#fce7cb" }}>
+        <td class="text-lg font-bold">
+          Personnel Cost
+        </td>
+        <td class="align-top">
+          <span class="bg-green-800 font-bold text-white px-1">Best:</span> Everything is managed by AWS, little maintenance manpower required.
+        </td>
+        <td class="align-top">
+          <span class="text-green-800 font-bold">Good:</span> Operators only need to manage workload nodes.
+        </td>
+        <td class="align-top">
+          <span class="bg-red-800 text-white font-bold px-1">Worst:</span> Operators need knowledge and skills to manage control plane and workload nodes.
+        </td>
+      </tr>
+      <tr style={{ backgroundColor: "#dbcee6" }}>
+        <td class="text-lg font-bold">
+          Debug Privileges
+        </td>
+        <td class="align-top">
+          <span class="bg-red-800 font-bold text-white px-1">Worst:</span> Without root access on the micro VMs hosting Fargate pods, it is very difficult to trace syscalls or debug issues.
+        </td>
+        <td class="align-top">
+          <span class="bg-green-800 font-bold text-white px-1">Best:</span> Privileged access on VMs for control, while removing the noise that is the k8s control plane.
+        </td>
+        <td class="align-top">
+          <span class="text-green-800 font-bold">Good:</span> Control over everything, which can lead to more unnecessary sources of error.
+        </td>
+      </tr>
+      <tr style={{ backgroundColor: "#dbcee6" }}>
+        <td class="text-lg font-bold">
+          Software Isolation
+        </td>
+        <td class="align-top">
+          <span class="bg-green-800 text-white font-bold px-1">Best:</span> Micro-VMs isolate each container.
+        </td>
+        <td class="align-top">
+          <span class="text-red-800 font-bold">Bad:</span> Isolation is entirely up to the operator.
+        </td>
+        <td class="align-top">
+          <span class="text-red-800 font-bold">Bad:</span> Isolation is entirely up to the operator.
+        </td>
+      </tr>
+      <tr style={{ backgroundColor: "#d6e8fd" }}>
+        <td class="text-lg font-bold">
+          Protocol Compliance
+        </td>
+        <td class="align-top">
+          <span class="bg-red-800 text-white font-bold px-1">Worst:</span> Requires a proxy since Fargate does not support SCTP port 38412 (NGAP).
+        </td>
+        <td class="align-top">
+          <span class="bg-green-800 text-white font-bold px-1">Best:</span> Ports work as-is as long as you allow it in the firewall.
+        </td>
+        <td class="align-top">
+          <span class="bg-green-800 text-white font-bold px-1">Best:</span> Ports work as-is as long as you allow it in the firewall.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
 
 ## Cost Efficiency Validation
