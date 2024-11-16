@@ -44,7 +44,7 @@ const prefix = baseUrl.endsWith("/") ? baseUrl : baseUrl + "/";
     <title>{title}</title>
   </head>
   <body
-    class="flex flex-col gap-4 items-center pt-12 pb-6 w-full *:px-6 *:max-w-[60rem]"
+    class="flex flex-col gap-12 items-center pt-12 pb-6 w-full *:px-6 *:max-w-[60rem]"
   >
     <slot />
     <footer class="m-auto">
@@ -63,6 +63,29 @@ const prefix = baseUrl.endsWith("/") ? baseUrl : baseUrl + "/";
         >.
       </p>
     </footer>
+  <script>
+    function otp_string(s: string, t: string)
+    {
+      // Do one time pad within the ASCII alphabet range only (32-126)
+      let result = '';
+      for (let i = 0; i < s.length; i++) {
+        const charCode = s.charCodeAt(i) - t.charCodeAt(i % t.length);
+        result += String.fromCharCode(32 + ((95 + charCode) % 95));
+      }
+      return result;
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      // For each class with author-url, replace the text with the email address
+      document.querySelectorAll('.author-url').forEach((element) => {
+        const hrefAttr = element.getAttribute("href");
+        if (!hrefAttr) return;
+        const email = otp_string(hrefAttr, 'bxWnz7*GqFyD8ce6bS!rD5Gpy');
+        element.setAttribute("href", 'mailto:' + email);
+      });
+    });
+
+  </script>
   </body>
 </html>
 

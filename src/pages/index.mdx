@@ -1,26 +1,22 @@
 ---
 layout: ../layouts/Layout.astro
-title: Academic Project Page Template
-description: Simple project page template for your research paper, built with Astro and Tailwind CSS
+title: On The Public Cloud Deployment of Cloud-Native Mobile Core Systems
+description: Leveraging the public cloud for the Core Network (CN) remains uncommon amongst mobile network operators, despite the economical and operational benefits. We present a holistic analysis of the public cloud in comparison to on-site mobile core deployments, showing the technical and economical feasibility, and laying the ground for further adoption of the public cloud.
 favicon: favicon.svg
-thumbnail: screenshot.png
 ---
 
 import Layout from "../layouts/Layout.astro";
 
 import Header from "../components/Header.astro";
-import Video from "../components/Video.astro";
 import HighlightedSection from "../components/HighlightedSection.astro";
 import SmallCaps from "../components/SmallCaps.astro";
 import Figure from "../components/Figure.astro";
 import Image from "../components/Image.astro";
-import TwoColumns from "../components/TwoColumns.astro";
-import YouTubeVideo from "../components/YouTubeVideo.astro";
 import LaTeX from "../components/LaTeX.astro";
 
-import outside from "../assets/outside.mp4";
-import transformer from "../assets/transformer.webp";
-import Splat from "../components/Splat.tsx"
+import challenges from "../assets/challenges.svg?raw";
+import latencies from "../assets/latencies.svg?raw";
+import vcpus from "../assets/vcpus.svg?raw";
 
 import CodeBlock from "../components/CodeBlock.astro";
 import Table from "../components/Table.astro";
@@ -30,118 +26,220 @@ export const components = {pre: CodeBlock, table: Table}
   title={frontmatter.title}
   authors={[
     {
-      name: "Roman Hauksson",
-      url: "https://roman.technology",
-      institution: "Independent",
-      notes: ["*", "†"],
-    },
-    {
-      name: "Author Two",
-      institution: "Institution Two",
-      notes: ["*", "†"],
-    },
-    {
-      name: "Author Three",
-      institution: "Institution Three",
+      name: "Yuto Takano",
+      url: "\\nL^),k3S5id}HswFav^",
       notes: ["†"],
     },
     {
-      name: "Author Four",
-      institution: "Institution Four",
+      name: "Andrew E. Ferguson",
+      notes: ["†"],
+    },
+    {
+      name: "Mahesh K. Marina",
+      notes: ["†"],
     },
   ]}
-  conference="Conference Name"
+  conference="ACM MobiCom 2024"
   notes={[
     {
-      symbol: "*",
-      text: "author note one",
-    },
-    {
       symbol: "†",
-      text: "author note two",
+      text: "The University of Edinburgh",
     },
   ]}
   links={[
     {
-      name: "Paper",
-      url: "",
+      name: "Poster PDF",
+      url: "MobiCom_2024_Public_Cloud_Deployment_Poster.pdf",
       icon: "fa-solid:file-pdf",
-    },
-    {
-      name: "Code",
-      url: "https://github.com/RomanHauksson/academic-project-astro-template",
-      icon: "mdi:github",
-    },
-    {
-      name: "arXiv",
-      url: "",
-      icon: "academicons:arxiv",
     },
   ]}
   />
 
-<Video source={outside} />
-
 <HighlightedSection>
 
-## Abstract
+## Overview
 
-This is a live demo for a template you can use to create a simple project page for your research paper. See the code for the template and instructions on how to use it yourself [here](https://github.com/RomanHauksson/academic-project-astro-template). It's made with the [Astro web framework](https://astro.build/) and styled with [Tailwind CSS](https://tailwindcss.com/). You write the content in [MDX](https://mdxjs.com/), which enables markdown formatting like **bold**, _italics_, and ~strikethrough~, as well as custom components like <SmallCaps>small caps.</SmallCaps>
+Leveraging the public cloud for the Core Network (CN) remains uncommon amongst mobile network operators, despite the economical and operational benefits. The drive to "cloud-native", through advancements in mobile core architecture research and standard evolution have made the case stronger.
+
+We believe that there are four types of challenges inhibiting this adoption: (1.) Jurisdictional regulations, (2.) Cost Transparency, (3.) Safety and Control, and (4.) 3GPP \& SLA compliance. In addition, all of the aforementioned challenges apart from (1) require in-depth observability, which would be hard to achieve without direct control of the hardware.
+
+While some past works have analyzed limited aspects of these challenges [[1]], our findings are the first to provide a holistic analysis of the public cloud in comparison to on-site mobile core deployments. Our findings show the technical and economical feasibility, and lay the ground for further adoption of the public cloud.
 
 </HighlightedSection>
 
-## Figures
+## Challenges
 
-Use the figure component to display images, videos, equations, or any other element, with an optional caption.
+The following is a diagram illustrating the challenges inhibiting the adoption of the public cloud for 5G CNs. This matches industry survey results [[2]].
 
-<Figure
-    caption="Diagram of the transformer deep learning architecture."
-  >
-    <Image source={transformer} altText="Diagram of the transformer deep learning architecture." />
-</Figure>
+<div style="width: 100%;margin: 1rem 0 3rem 0" set:html={challenges} />
 
-## Two columns
+## Deployment Methods
 
-Use the two columns component to display two columns of content. In this example, the first column contains a figure with a YouTube video and the second column contains a figure with a custom [React](https://react.dev/) component. By default, they display side by side, but if the screen is narrow enough (for example, on mobile), they're arranged vertically.
+<div class="flex flex-wrap gap-4 w-full">
+  <div class="flex-1 min-w-[16rem]">
+    <h3 class="mb-3">Elastic Kubernetes Service (EKS) with Fargate instances</h3>
+    <p>
+    EKS is AWS's managed Kubernetes control-plane. Fargate is AWS's compute engine technology for cloud-native software, which runs each container in its own ephemeral micro VM. The equivalent on GCP and Azure are "Cloud Run" and "Container Apps". EKS costs $0.1/hour, and Fargate costs $0.0133/vCPU/hour for compute and $0.00147/GB/hour for memory
+    </p>
+  </div>
+  <div class="flex-1 min-w-[16rem]">
+    <h3 class="mb-3">EKS with Elastic Compute Cloud (EC2) instances</h3>
+    <p>
+    EKS can be configured to use standard EC2 VMs for container scheduling too. EC2 costs vary largely, but for CPU-bound software like the CN, machines like `t3.medium` at $0.0418 for 2 vCPU and 4 GB memory is enough.
+    </p>
+  </div>
+  <div class="flex-1 min-w-[16rem]">
+    <h3 class="mb-3">Self-managed Kubernetes on EC2 instances</h3>
+    <p>
+    One can also host their own Kubernetes control-plane within a EC2 VM too, and manage its configuration entirely themselves.
+    </p>
+  </div>
+</div>
 
-<TwoColumns>
-  <Figure slot="left" caption="Take a look at this YouTube video.">
-    <YouTubeVideo videoId="wjZofJX0v4M" />
-  </Figure>
-  <Figure slot="right" caption="Now look at this Gaussian Splat, rendered with a React component.">
-    <Splat client:idle />
-  </Figure>
-</TwoColumns>
 
-## Heading levels
+## Qualitative Analysis
 
-Use headings to divide your content into sections.
+<table style={{ width: "100%", borderCollapse: "collapse" }}>
+  <thead>
+    <tr>
+      <th></th>
+      <th class="bg-red-800 text-white p-2">
+        <span style={{ fontSize: "larger" }}>EKS with Fargate</span> <br /> <span>(unsuited)</span>
+      </th>
+      <th class="bg-green-800 text-white p-2">
+        <span style={{ fontSize: "larger" }}>EKS with EC2</span> <br /> <span>(feasible)</span>
+      </th>
+      <th class="bg-gray-400 text-white p-2">
+        <span style={{ fontSize: "larger" }}>Self-hosted K8S on EC2</span> <br /> <span>(suboptimal)</span>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="text-lg font-bold">
+        Flexibility in Configuration
+      </td>
+      <td class="align-top">
+        <span class="bg-red-800 text-white font-bold px-1">Worst:</span> Fargate's minimum VM size is 0.25 vCPU 0.5 GB. This leads to underutilisation for cloud-native CNs like CoreKube, which handles larger demands by replicating many lightweight containers.
+      </td>
+      <td class="align-top">
+        <span class="bg-green-800 text-white font-bold px-1">Best:</span> A standard VM such as <code>t3.medium</code> can fit six to seven Fargate-size pods. With CoreKube-like architectures, one can run even more pods per instance for higher performance at the same price.
+      </td>
+      <td class="align-top">
+        <span class="text-green-800 font-bold">Good:</span> The full range of EC2 VMs is available to choose from, and you can pack pods for cost efficiency. However, this setup requires extra fault-tolerant VMs for the k8s control plane to achieve HA.
+      </td>
+    </tr>
+    <tr style={{ backgroundColor: "#fce7cb" }}>
+      <td class="text-lg font-bold">
+        Migration Cost
+      </td>
+      <td class="align-top">
+        <span class="bg-red-800 font-bold text-white px-1">Worst:</span> Software required to adapt to managed k8s control plane and VM abstraction.
+      </td>
+      <td class="align-top">
+        <span class="text-red-800 font-bold">Good:</span> Requires software changes but only to adapt to the managed k8s control plane.
+      </td>
+      <td class="align-top">
+        <span class="bg-green-800 font-bold text-white px-1">Best:</span> No software changes required compared to on-prem.
+      </td>
+    </tr>
+    <tr style={{ backgroundColor: "#fce7cb" }}>
+      <td class="text-lg font-bold">
+        Service Cost
+      </td>
+      <td class="align-top">
+        <span class="text-green-800 font-bold">Good:</span> EKS cost, plus pricing for Fargate compute and memory based pricisely on usage.
+      </td>
+      <td class="align-top">
+        <span class="bg-green-800 font-bold text-white px-1">Best:</span> EKS cost, plus EC2 VM cost. EC2 Spots achieve better price-per-pod than Fargate.
+      </td>
+      <td class="align-top">
+        <span class="text-green-800 font-bold">Good:</span> Only EC2 VM cost. But high availability control-plane puts costs about equal as EKS.
+      </td>
+    </tr>
+    <tr style={{ backgroundColor: "#fce7cb" }}>
+      <td class="text-lg font-bold">
+        Personnel Cost
+      </td>
+      <td class="align-top">
+        <span class="bg-green-800 font-bold text-white px-1">Best:</span> Everything is managed by AWS, little maintenance manpower required.
+      </td>
+      <td class="align-top">
+        <span class="text-green-800 font-bold">Good:</span> Operators only need to manage workload nodes.
+      </td>
+      <td class="align-top">
+        <span class="bg-red-800 text-white font-bold px-1">Worst:</span> Operators need knowledge and skills to manage control plane and workload nodes.
+      </td>
+    </tr>
+    <tr style={{ backgroundColor: "#dbcee6" }}>
+      <td class="text-lg font-bold">
+        Debug Privileges
+      </td>
+      <td class="align-top">
+        <span class="bg-red-800 font-bold text-white px-1">Worst:</span> Without root access on the micro VMs hosting Fargate pods, it is very difficult to trace syscalls or debug issues.
+      </td>
+      <td class="align-top">
+        <span class="bg-green-800 font-bold text-white px-1">Best:</span> Privileged access on VMs for control, while removing the noise that is the k8s control plane.
+      </td>
+      <td class="align-top">
+        <span class="text-green-800 font-bold">Good:</span> Control over everything, which can lead to more unnecessary sources of error.
+      </td>
+    </tr>
+    <tr style={{ backgroundColor: "#dbcee6" }}>
+      <td class="text-lg font-bold">
+        Software Isolation
+      </td>
+      <td class="align-top">
+        <span class="bg-green-800 text-white font-bold px-1">Best:</span> Micro-VMs isolate each container.
+      </td>
+      <td class="align-top">
+        <span class="text-red-800 font-bold">Bad:</span> Isolation is entirely up to the operator.
+      </td>
+      <td class="align-top">
+        <span class="text-red-800 font-bold">Bad:</span> Isolation is entirely up to the operator.
+      </td>
+    </tr>
+    <tr style={{ backgroundColor: "#d6e8fd" }}>
+      <td class="text-lg font-bold">
+        Protocol Compliance
+      </td>
+      <td class="align-top">
+        <span class="bg-red-800 text-white font-bold px-1">Worst:</span> Requires a proxy since Fargate does not support SCTP port 38412 (NGAP).
+      </td>
+      <td class="align-top">
+        <span class="bg-green-800 text-white font-bold px-1">Best:</span> Ports work as-is as long as you allow it in the firewall.
+      </td>
+      <td class="align-top">
+        <span class="bg-green-800 text-white font-bold px-1">Best:</span> Ports work as-is as long as you allow it in the firewall.
+      </td>
+    </tr>
+  </tbody>
+</table>
 
-### Heading 3
 
-Go down a level to heading 3...
+## Cost Efficiency Validation
 
-#### Heading 4
+<div class="w-full" set:html={vcpus} />
 
-...and down again to heading 4.
+The compute (vCPU) usage per worker pod under a load of 100 connected UEs shows that Fargate instances are not efficient in their resource use.
 
-## LaTeX
+※ Note that the EC2 results apply for both EKS and Self-Managed control plane deployments.
 
-You can also add LaTeX formulas, rendered during the build process using [KaTeX](https://katex.org/) so they're quick to load for visitors of your project page. You can write them inline, like this: <LaTeX inline formula="a^2 + b^2 = c^2" />. Or, you can write them as a block:
+## SLA Conformance Validation
 
+<div class="w-full" set:html={latencies} />
+
+The control-plane message processing latency shows Fargate as being unacceptably slow and inconsistent w.r.t the allowed end-to-end latency.
+
+※ Note that the EC2 results apply for both EKS and Self-Managed control plane deployments.
+
+## Future Work
+
+- **Observability Solution.** Underpinning all the challenges featured in our work is `Observability', the ability to monitor the state of each and automatically or manually act. Our future work is to propose a software solution to improve observability in cloud-native CN software specifically for public cloud use cases.
+- **Dataplane Feasibility.** The dataplane is subject to stricter latency and reliability requirements than the control plane. Further work is required to determine the feasibility of the public cloud for the dataplane, and otherwise design architectures to overcome any challenges.
+
+{/* 
 <LaTeX formula="\int_a^b f(x) dx" />
-
-## Tables
-
-You can add simple tables using [GitHub Flavored Markdown syntax](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/organizing-information-with-tables):
-
-| Model | Accuracy | F1 score | Training time (hours) |
-| :--- | :---: | :---: | :---: |
-| BERT-base | 0.89 | 0.87 | 4.5 |
-| RoBERTa-large | 0.92 | 0.91 | 7.2 |
-| DistilBERT | 0.86 | 0.84 | 2.1 |
-| XLNet | 0.90 | 0.89 | 6.8 |
-
 ## BibTeX citation
 
 ```bibtex
@@ -151,4 +249,8 @@ You can add simple tables using [GitHub Flavored Markdown syntax](https://docs.g
   year = "2024",
   howpublished = "\url{https://research-template.roman.technology}",
 }
-```
+``` */}
+
+[1]: https://dl.acm.org/doi/abs/10.1145/3241539.3241564
+[2]: https://www.analysysmason.com/contentassets/159c180ce38c4bc6bd198949c9af9b42/analysys_mason_sovereign_cloud_5g_perspective_feb2023_rma16.pdf
+[3]: https://dl.acm.org/doi/10.1145/3570361.3592522
