@@ -77,19 +77,19 @@ The following is a diagram illustrating the challenges inhibiting the adoption o
 
 <div class="flex flex-wrap gap-4 w-full">
   <div class="flex-1 min-w-[16rem]">
-    <h3 class="mb-3">Elastic Kubernetes Service (EKS) with Fargate instances</h3>
+    <h3 class="mb-3">1. Elastic Kubernetes Service (EKS) with Fargate instances</h3>
     <p>
     EKS is AWS's managed Kubernetes control-plane. Fargate is AWS's compute engine technology for cloud-native software, which runs each container in its own ephemeral micro VM. The equivalent on GCP and Azure are "Cloud Run" and "Container Apps". EKS costs $0.1/hour, and Fargate costs $0.0133/vCPU/hour for compute and $0.00147/GB/hour for memory
     </p>
   </div>
   <div class="flex-1 min-w-[16rem]">
-    <h3 class="mb-3">EKS with Elastic Compute Cloud (EC2) instances</h3>
+    <h3 class="mb-3">2. EKS with Elastic Compute Cloud (EC2) instances</h3>
     <p>
     EKS can be configured to use standard EC2 VMs for container scheduling too. EC2 costs vary largely, but for CPU-bound software like the CN, machines like `t3.medium` at $0.0418 for 2 vCPU and 4 GB memory is enough.
     </p>
   </div>
   <div class="flex-1 min-w-[16rem]">
-    <h3 class="mb-3">Self-managed Kubernetes on EC2 instances</h3>
+    <h3 class="mb-3">3. Self-managed Kubernetes on EC2 instances</h3>
     <p>
     One can also host their own Kubernetes control-plane within a EC2 VM too, and manage its configuration entirely themselves.
     </p>
