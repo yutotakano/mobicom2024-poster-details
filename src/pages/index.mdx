@@ -95,21 +95,15 @@ We run our evaluation and experiments on the following setup:
 <div class="flex flex-wrap gap-4 w-full">
   <div class="flex-1 min-w-[16rem]">
     <h3 class="mb-3">1. Elastic Kubernetes Service (EKS) with Fargate instances</h3>
-    <p class="text-base">
-    EKS is AWS's managed Kubernetes control-plane. Fargate is AWS's compute engine technology for cloud-native software, which runs each container in its own ephemeral micro VM. The equivalent on GCP and Azure are "Cloud Run" and "Container Apps". EKS costs $0.1/hour, and Fargate costs $0.0133/vCPU/hour for compute and $0.00147/GB/hour for memory respectively.
-    </p>
+    <p class="text-base">EKS is AWS's managed Kubernetes control-plane. Fargate is AWS's compute engine technology for cloud-native software, which runs each container in its own ephemeral micro VM. The equivalent on GCP and Azure are "Cloud Run" and "Container Apps". EKS costs $0.1/hour, and Fargate costs $0.0133/vCPU/hour for compute and $0.00147/GB/hour for memory respectively.</p>
   </div>
   <div class="flex-1 min-w-[16rem]">
     <h3 class="mb-3">2. EKS with Elastic Compute Cloud (EC2) instances</h3>
-    <p class="text-base">
-    EKS can be configured to use standard EC2 VMs for container scheduling too. EC2 costs vary largely, but for CPU-bound software like the CN, machines like `t3.medium` at $0.0418 for 2 vCPU and 4 GB memory is enough.
-    </p>
+    <p class="text-base">EKS can be configured to use standard EC2 VMs for container scheduling too. EC2 costs vary largely, but for CPU-bound software like the CN, machines like `t3.medium` at $0.0418 for 2 vCPU and 4 GB memory is enough.</p>
   </div>
   <div class="flex-1 min-w-[16rem]">
     <h3 class="mb-3">3. Self-managed Kubernetes on EC2 instances</h3>
-    <p class="text-base">
-    One can also host their own Kubernetes control-plane within a EC2 VM too, and manage its configuration entirely themselves.
-    </p>
+    <p class="text-base">One can also host their own Kubernetes control-plane within a EC2 VM too, and manage its configuration entirely themselves.</p>
   </div>
 </div>
 
@@ -262,19 +256,6 @@ The control-plane message processing latency shows Fargate as being unacceptably
 Our poster explored and demonstrated the feasibility of deploying a cloud-native mobile core network to public cloud infrastructure, from a holistic perspective encompassing ease of manageability, cost, and performance. We performed detailed qualitative analysis of estimated cost, technical challenges, manageability and observability of each deployment option. We then performed experimental validation of message latency and cost efficiency, and concluded that a public cloud deployment is feasible from a cost and performance perspective. Our recommend deployment method is to use a managed K8S control plane like EKS, together with VMs like EC2. 
 
 We further noticed the lack of good observability into the challenges and criteria highlighted in this poster, which could hinder adoption of both 5G and public cloud deployment in mobile network operators. A solution to this will be presented in our next work.
-
-{/* 
-<LaTeX formula="\int_a^b f(x) dx" />
-## BibTeX citation
-
-```bibtex
-@misc{roman2024academic,
-  author = "{Roman Hauksson}",
-  title = "Academic Project Page Template",
-  year = "2024",
-  howpublished = "\url{https://research-template.roman.technology}",
-}
-``` */}
 
 [1]: https://dl.acm.org/doi/abs/10.1145/3241539.3241564
 [2]: https://www.analysysmason.com/contentassets/159c180ce38c4bc6bd198949c9af9b42/analysys_mason_sovereign_cloud_5g_perspective_feb2023_rma16.pdf
