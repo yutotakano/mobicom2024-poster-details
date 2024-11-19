@@ -61,7 +61,7 @@ export const components = {pre: CodeBlock, table: Table}
 
 Leveraging the public cloud for the Core Network (CN) remains uncommon amongst mobile network operators, despite the economical and operational benefits. The drive to "cloud-native", through advancements in mobile core architecture research and standard evolution have made the case stronger.
 
-We believe that there are four types of challenges inhibiting this adoption: (1.) Jurisdictional regulations, (2.) Cost Transparency, (3.) Safety and Control, and (4.) 3GPP \& SLA compliance. In addition, all of the aforementioned challenges apart from (1) require in-depth observability, which would be hard to achieve without direct control of the hardware.
+We believe that there are four types of challenges inhibiting this adoption: ❶ Jurisdictional regulations, ❷ Cost Transparency, ❸ Safety and Control, and ❹ 3GPP & SLA compliance. In addition, all of the aforementioned challenges apart from the first require in-depth observability, which would be hard to achieve without direct control of the hardware.
 
 While some past works have analyzed limited aspects of these challenges [[1]], our findings are the first to provide a holistic analysis of the public cloud in comparison to on-site mobile core deployments. Our findings show the technical and economical feasibility, and lay the ground for further adoption of the public cloud.
 
@@ -72,6 +72,24 @@ While some past works have analyzed limited aspects of these challenges [[1]], o
 The following is a diagram illustrating the challenges inhibiting the adoption of the public cloud for 5G CNs. This matches industry survey results [[2]].
 
 <div style="width: 100%;margin: 1rem 0 3rem 0" set:html={challenges} />
+
+## Previous Work
+
+Previous works have examined the reliability [[1]] and data privacy of the public cloud [[2]]. Our's is the first to provide a holistic analysis including technical measurements and relative cost estimations.
+
+In industry, Mobi in 2022 put some of their spectrum access system of their 5G mobile core to AWS [[8]]. In 2024, O2 Telefónica announced their move to AWS for their core as well [[9]]. These announcements exemplify the industry's attention towards moving the core to the public cloud to achieve cost savings. The O2 Telefónica case is particularly informative, as the press release explains the specific technologies used: AWS Elastic Kubernetes Service for orchestration, AWS Elastic Compute Cloud VMs for virtualization, AWS Direct Connect for connecting to on-premise software, and AWS Nitro System for security.
+Other major network operators such as Three have migrated their non-critical IT workloads to the public cloud [[10]], building knowledge internally to prepare for full migration.
+
+The appeals of the public cloud are clear from these cases. Our work is the first of its kind to extensively analyze this deployment strategy, with an aim to uncover the benefits, operational challenges, and improvements that need addressing for further adoption.
+
+## Setup
+
+We run our evaluation and experiments on the following setup:
+
+- Public Cloud: AWS. AWS' plans are representative of all public hypercloud offers, with options for managed Kubernetes control-planes, managed VMs, serverless functionality, managed databases, etc.
+- CN software: CoreKube [[3]], which is a cloud-native mobile core system. It was chosen for being representative of the direction CN software are heading. Other similar works include ML-SLD [[4]], Proc5GC [[5]], and PP5GS [[6]].
+
+For simulating traffic to the CN, we used the Nervion RAN emulator [[7]].
 
 ## Deployment Methods
 
@@ -240,6 +258,12 @@ The control-plane message processing latency shows Fargate as being unacceptably
 - **Observability Solution.** Underpinning all the challenges featured in our work is `Observability', the ability to monitor the state of each and automatically or manually act. Our future work is to propose a software solution to improve observability in cloud-native CN software specifically for public cloud use cases.
 - **Dataplane Feasibility.** The dataplane is subject to stricter latency and reliability requirements than the control plane. Further work is required to determine the feasibility of the public cloud for the dataplane, and otherwise design architectures to overcome any challenges.
 
+## Conclusions
+
+Our poster explored and demonstrated the feasibility of deploying a cloud-native mobile core network to public cloud infrastructure, from a holistic perspective encompassing ease of manageability, cost, and performance. We performed detailed qualitative analysis of estimated cost, technical challenges, manageability and observability of each deployment option. We then performed experimental validation of message latency and cost efficiency, and concluded that a public cloud deployment is feasible from a cost and performance perspective. Our recommend deployment method is to use a managed K8S control plane like EKS, together with VMs like EC2. 
+
+We further noticed the lack of good observability into the challenges and criteria highlighted in this poster, which could hinder adoption of both 5G and public cloud deployment in mobile network operators. A solution to this will be presented in our next work.
+
 {/* 
 <LaTeX formula="\int_a^b f(x) dx" />
 ## BibTeX citation
@@ -256,3 +280,10 @@ The control-plane message processing latency shows Fargate as being unacceptably
 [1]: https://dl.acm.org/doi/abs/10.1145/3241539.3241564
 [2]: https://www.analysysmason.com/contentassets/159c180ce38c4bc6bd198949c9af9b42/analysys_mason_sovereign_cloud_5g_perspective_feb2023_rma16.pdf
 [3]: https://dl.acm.org/doi/10.1145/3570361.3592522
+[4]: https://doi.org/10.1016/j.dcan.2022.04.026
+[5]: https://doi.org/10.1109/BlackSeaCom58138.2023.10299772
+[6]: https://doi.org/10.1109/TNSM.2022.3230206
+[7]: https://dl.acm.org/doi/10.1145/3447993.3483248
+[8]: https://www.federatedwireless.com/news/federated-wireless-mobi-cbrs-deployment
+[9]: https://aws.amazon.com/blogs/industries/o2-telefonica-moves-its-5g-core-network-to-the-cloud-with-aws-and-nokia/
+[10]: https://www.lightreading.com/cloud/the-public-cloud-has-failed-to-crack-telecom
