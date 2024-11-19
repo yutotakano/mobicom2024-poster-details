@@ -82,6 +82,7 @@ Other major network operators such as Three have migrated their non-critical IT 
 
 The appeals of the public cloud are clear from these cases. Our work is the first of its kind to extensively analyze this deployment strategy, with an aim to uncover the benefits, operational challenges, and improvements that need addressing for further adoption.
 
+
 ## Setup
 
 We run our evaluation and experiments on the following setup:
@@ -242,7 +243,7 @@ The compute (vCPU) usage per worker pod under a load of 100 connected UEs shows 
 
 <div class="w-full" set:html={latencies} />
 
-The control-plane message processing latency shows Fargate as being unacceptably slow and inconsistent w.r.t the allowed end-to-end latency.
+The control-plane message processing latency shows Fargate as being unacceptably slow and inconsistent w.r.t the allowed end-to-end latency. This 'allowed latency' value is not a precise requirement from 3GPP, but a recommended value [[11]].
 
 ※ Note that the EC2 results apply for both EKS and Self-Managed control plane deployments.
 
@@ -267,3 +268,4 @@ We further noticed the lack of good observability into the challenges and criter
 [8]: https://www.federatedwireless.com/news/federated-wireless-mobi-cbrs-deployment
 [9]: https://aws.amazon.com/blogs/industries/o2-telefonica-moves-its-5g-core-network-to-the-cloud-with-aws-and-nokia/
 [10]: https://www.lightreading.com/cloud/the-public-cloud-has-failed-to-crack-telecom
+[11]: https://opennetworking.org/wp-content/uploads/2022/05/Jingqi-Huang-and-Jiayi-Meng-Final-Slide-Deck.pdf
